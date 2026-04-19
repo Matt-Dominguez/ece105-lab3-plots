@@ -82,6 +82,10 @@ def plot_scatter(sensor_a, sensor_b, timestamps, ax):
     ax.legend()
     ax.grid(True, alpha=0.3)
 
+# Overlaid histogram of Sensor A and Sensor B temperature distributions.
+# Use 30 bins, alpha=0.5 for transparency so both distributions are visible.
+# Add vertical dashed lines at each sensor's mean.
+# Include a legend labeling each sensor.
 
 def plot_histogram(sensor_a, sensor_b, ax):
     """Create overlaid histogram of sensor temperature distributions on given Axes.
@@ -114,3 +118,34 @@ def plot_histogram(sensor_a, sensor_b, ax):
     ax.set_title('Temperature Distribution Comparison')
     ax.legend()
     ax.grid(True, alpha=0.3)
+
+
+def plot_boxplot(sensor_a, sensor_b, ax):
+    """Create side-by-side box plot comparing sensor temperature distributions.
+    
+    Draws box plots for both sensors showing distribution statistics
+    (median, quartiles, outliers). Includes a horizontal reference line
+    at the overall mean. Modifies the Axes object in place.
+    
+    Parameters
+    ----------
+    sensor_a : ndarray
+        (200,) array of temperature readings in Celsius from Sensor A.
+    sensor_b : ndarray
+        (200,) array of temperature readings in Celsius from Sensor B.
+    ax : matplotlib.axes.Axes
+        Axes object to draw on. Modified in place.
+    
+    Returns
+    -------
+    None
+    """
+    ax.boxplot([sensor_a, sensor_b], labels=['Sensor A', 'Sensor B'])
+    overall_mean = np.mean(np.concatenate([sensor_a, sensor_b]))
+    ax.axhline(overall_mean, linestyle='--', linewidth=2, 
+               label=f'Overall Mean: {overall_mean:.2f}°C')
+    ax.set_xlabel('Sensor')
+    ax.set_ylabel('Temperature (deg C)')
+    ax.set_title('Temperature Distribution Comparison')
+    ax.legend()
+    ax.grid(True, alpha=0.3, axis='y')
