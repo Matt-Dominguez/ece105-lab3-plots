@@ -8,6 +8,10 @@ Usage
 -----
     python generate_plots.py
 """
+#impport necessary libraries
+# Create a function generate_data(seed) that returns sensor_a, sensor_b,
+# and timestamps arrays with the same parameters as in the notebook.
+# Use NumPy-style docstring with Parameters and Returns sections.
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -43,3 +47,34 @@ def generate_data(seed):
     timestamps = np.sort(rng.uniform(low=0, high=10, size=200))
     
     return sensor_a, sensor_b, timestamps
+
+
+def plot_scatter(sensor_a, sensor_b, timestamps, ax):
+    """Create scatter plot of sensor readings vs time on given Axes.
+    
+    Draws a scatter plot showing temperature readings from two sensors
+    over time, with distinct colors and transparency to show overlap.
+    Modifies the Axes object in place.
+    
+    Parameters
+    ----------
+    sensor_a : ndarray
+        (200,) array of temperature readings in Celsius from Sensor A.
+    sensor_b : ndarray
+        (200,) array of temperature readings in Celsius from Sensor B.
+    timestamps : ndarray
+        (200,) array of timestamps in seconds.
+    ax : matplotlib.axes.Axes
+        Axes object to draw on. Modified in place.
+    
+    Returns
+    -------
+    None
+    """
+    ax.scatter(timestamps, sensor_a, color='blue', label='Sensor A', alpha=0.6, s=50)
+    ax.scatter(timestamps, sensor_b, color='orange', label='Sensor B', alpha=0.6, s=50)
+    ax.set_xlabel('Time (seconds)')
+    ax.set_ylabel('Temperature (°C)')
+    ax.set_title('Sensor Temperature Readings Over Time')
+    ax.legend()
+    ax.grid(True, alpha=0.3)
