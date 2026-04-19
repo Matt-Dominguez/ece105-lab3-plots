@@ -119,6 +119,9 @@ def plot_histogram(sensor_a, sensor_b, ax):
     ax.legend()
     ax.grid(True, alpha=0.3)
 
+# Side-by-side box plot comparing Sensor A and Sensor B distributions.
+# Label x-axis with sensor names, y-axis with "Temperature (deg C)".
+# Add a horizontal dashed line at the overall mean of both sensors combined.
 
 def plot_boxplot(sensor_a, sensor_b, ax):
     """Create side-by-side box plot comparing sensor temperature distributions.
@@ -149,3 +152,40 @@ def plot_boxplot(sensor_a, sensor_b, ax):
     ax.set_title('Temperature Distribution Comparison')
     ax.legend()
     ax.grid(True, alpha=0.3, axis='y')
+
+
+def main():
+    """Generate synthetic sensor data and create publication-quality visualizations.
+    
+    Creates three synchronized plots (scatter, histogram, box plot) showing
+    temperature sensor data distributions. Saves the figure as a PNG file.
+    
+    Parameters
+    ----------
+    None
+    
+    Returns
+    -------
+    None
+    """
+    # Generate synthetic sensor data with seed 6063
+    sensor_a, sensor_b, timestamps = generate_data(seed=6063)
+    
+    # Create figure with 1x3 subplots
+    fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+    
+    # Create each plot
+    plot_scatter(sensor_a, sensor_b, timestamps, axes[0])
+    plot_histogram(sensor_a, sensor_b, axes[1])
+    plot_boxplot(sensor_a, sensor_b, axes[2])
+    
+    # Adjust layout for readability
+    plt.tight_layout()
+    
+    # Save figure
+    plt.savefig('sensor_analysis.png', dpi=150, bbox_inches='tight')
+    plt.show()
+
+
+if __name__ == '__main__':
+    main()
