@@ -153,12 +153,16 @@ def plot_boxplot(sensor_a, sensor_b, ax):
     ax.legend()
     ax.grid(True, alpha=0.3, axis='y')
 
+# Create main() that generates data, creates a 1x3 subplot figure,
+# calls each plot function, adjusts layout, and saves as sensor_analysis.png
+# at 150 DPI with tight bounding box.
 
 def main():
     """Generate synthetic sensor data and create publication-quality visualizations.
     
     Creates three synchronized plots (scatter, histogram, box plot) showing
-    temperature sensor data distributions. Saves the figure as a PNG file.
+    temperature sensor data distributions, plus a summary statistics panel.
+    Saves the figure as a PNG file.
     
     Parameters
     ----------
@@ -171,13 +175,41 @@ def main():
     # Generate synthetic sensor data with seed 6063
     sensor_a, sensor_b, timestamps = generate_data(seed=6063)
     
-    # Create figure with 1x3 subplots
-    fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+    # Create figure with 2x2 subplots
+    fig, axes = plt.subplots(2, 2, figsize=(12, 10))
     
     # Create each plot
-    plot_scatter(sensor_a, sensor_b, timestamps, axes[0])
-    plot_histogram(sensor_a, sensor_b, axes[1])
-    plot_boxplot(sensor_a, sensor_b, axes[2])
+    plot_scatter(sensor_a, sensor_b, timestamps, axes[0, 0])
+    plot_histogram(sensor_a, sensor_b, axes[0, 1])
+    plot_boxplot(sensor_a, sensor_b, axes[1, 0])
+    
+    # Add summary statistics in the fourth subplot
+    ax_stats = axes[1, 1]
+    ax_stats.axis('off')
+    
+    stats_text = f"""
+Summary Statistics
+
+Sensor A:
+  Mean:     {sensor_a.mean():.2f}°C
+  Std Dev:  {sensor_a.std():.2f}°C
+  Min:      {sensor_a.min():.2f}°C
+  Max:      {sensor_a.max():.2f}°C
+
+Sensor B:
+  Mean:     {sensor_b.mean():.2f}°C
+  Std Dev:  {sensor_b.std():.2f}°C
+  Min:      {sensor_b.min():.2f}°C
+  Max:      {sensor_b.max():.2f}°C
+
+Overall:
+  Combined Mean: {np.mean(np.concatenate([sensor_a, sensor_b])):.2f}°C
+  Sample Size:   {len(sensor_a)} readings per sensor
+"""
+    
+    ax_stats.text(0.1, 0.5, stats_text, fontfamily='monospace', fontsize=10,
+                  verticalalignment='center', bbox=dict(boxstyle='round', 
+                  facecolor='wheat', alpha=0.5))
     
     # Adjust layout for readability
     plt.tight_layout()
